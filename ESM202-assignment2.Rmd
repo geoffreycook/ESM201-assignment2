@@ -1,0 +1,17 @@
+---
+title: "ESM201-assignment2"
+author: "Geoffrey Cook"
+date: "3/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Reading in data and setting up libraries
+
+library(tidyverse)
+```
+
