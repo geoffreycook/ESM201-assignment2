@@ -13,5 +13,30 @@ knitr::opts_chunk$set(echo = TRUE)
 # Reading in data and setting up libraries
 
 library(tidyverse)
+grain <- read_csv("grain.csv")
+fertilizer <- read_csv("fertilizer.csv")
+
+```
+
+```{r Question 1A: Create a finalized plot (including title and caption) of yield vs. time for each of the grains in the dataset}
+
+grains_yield <- grain %>% 
+  select(year, yield, commodity) %>% 
+  group_by(commodity)
+
+grains_plot <- ggplot(grains_yield, aes(x = year, y = yield)) + 
+  geom_line(aes(color = commodity)) + 
+  facet_wrap("commodity") +
+  theme_classic() +
+  xlab("Year") +
+  ylab("Yield (bushels/acre)") +
+  ggtitle("Yield of Barley, Corn, Oats, and Sorghum from 1866 to 2018") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme(legend.title=element_blank())
+  
+
+grains_plot
 ```
 
