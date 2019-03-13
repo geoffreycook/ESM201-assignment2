@@ -36,7 +36,34 @@ grains_plot <- ggplot(grains_yield, aes(x = year, y = yield)) +
   scale_y_continuous() +
   theme(legend.title=element_blank())
   
-
 grains_plot
+```
+```{r Question 2A - Create a finalized plot (including title and caption) of fertilizer use vs time for each of the crops in the dataset}
+
+fertilizer_simple <- fertilizer %>% 
+  group_by(crop)
+  
+fertilizer_plot <- ggplot(fertilizer_simple, aes(x = year, y = ppa)) + 
+  geom_line(aes(color = fertilizer)) + 
+  facet_wrap("crop") +
+  theme_classic() +
+  xlab("Year") +
+  ylab("Fertilizer Application (pounds applied per acre)") +
+  ggtitle("Nutrient Loading by Crop") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  theme(legend.title=element_blank())
+
+fertilizer_plot
+```
+
+```{r Question 3A: For corn, create a finalized plot (including title and caption) of yield vs fertilizer ppa, separated by the type of fertilizer. Make the color of the dots correspond to year}
+
+fertilizer_corn <- grain %>% 
+  filter(commodity == "Corn") %>% 
+  select(year, commodity, yield)
+
+
 ```
 
