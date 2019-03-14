@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 grain <- read_csv("grain.csv")
 fertilizer <- read_csv("fertilizer.csv")
+library(RColorBrewer)
 
 ```
 
@@ -23,6 +24,9 @@ fertilizer <- read_csv("fertilizer.csv")
 grains_yield <- grain %>% 
   select(year, yield, commodity) %>% 
   group_by(commodity)
+
+corn_yield_simple <- grains_yield %>% 
+  filter(commodity == "Corn")
 
 grains_plot <- ggplot(grains_yield, aes(x = year, y = yield)) + 
   geom_line(aes(color = commodity)) + 
@@ -38,6 +42,7 @@ grains_plot <- ggplot(grains_yield, aes(x = year, y = yield)) +
   
 grains_plot
 ```
+
 ```{r Question 2A - Create a finalized plot (including title and caption) of fertilizer use vs time for each of the crops in the dataset}
 
 fertilizer_simple <- fertilizer %>% 
@@ -48,7 +53,7 @@ fertilizer_plot <- ggplot(fertilizer_simple, aes(x = year, y = ppa)) +
   facet_wrap("crop") +
   theme_classic() +
   xlab("Year") +
-  ylab("Fertilizer Application (pounds applied per acre)") +
+  ylab("Fertilizer Application (pounds/acre)") +
   ggtitle("Nutrient Loading by Crop") +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_x_continuous() +
@@ -59,11 +64,30 @@ fertilizer_plot
 ```
 
 ```{r Question 3A: For corn, create a finalized plot (including title and caption) of yield vs fertilizer ppa, separated by the type of fertilizer. Make the color of the dots correspond to year}
-
+# Creating a simplified df to represent just corn yield by year
 fertilizer_corn <- grain %>% 
   filter(commodity == "Corn") %>% 
   select(year, commodity, yield)
 
+# Join both df's by year so that one df has year, type of fertilizer applied to corn in that year, the amount of fertilizer applied per acre, and the yield
+fertilizer_merge <- merge(fertilizer_simple, corn_yield_simple, by="year") %>% 
+  group_by(fertilizer) %>% 
+  filter(crop == "Corn") %>% 
+  select(year, fertilizer, ppa, yield)
 
+# Visualizing with a graph
+corn_plot <- ggplot(fertilizer_merge, aes(x = ppa, y = yield)) + 
+  geom_point(aes(color = year)) +
+  scale_color_gradient(low = "green3", high = "red") +
+  facet_wrap("fertilizer") +
+  theme_classic() +
+  xlab("Fertilizer Added (pounds/acre)") +
+  ylab("Yield (bushels/acre)") +
+  ggtitle("Corn Yields through Time by Fertilizer Application Type") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous() +
+  theme(legend.title=element_blank())
+
+corn_plot
 ```
 
