@@ -2,7 +2,9 @@
 title: "ESM201-assignment2"
 author: "Geoffrey Cook"
 date: "3/5/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -49,8 +51,8 @@ fertilizer_simple <- fertilizer %>%
   group_by(crop)
   
 fertilizer_plot <- ggplot(fertilizer_simple, aes(x = year, y = ppa)) + 
-  geom_line(aes(color = fertilizer)) + 
-  facet_wrap("crop") +
+  geom_point(aes(color = fertilizer)) + 
+  facet_wrap("crop", ncol = 1) +
   theme_classic() +
   xlab("Year") +
   ylab("Fertilizer Application (pounds/acre)") +
